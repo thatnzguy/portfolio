@@ -155,7 +155,7 @@ a:hover { color: var(--text); }
   content: '';
   position: absolute;
   left: 0; right: 0;
-  height: 62px;
+  height: 90px;
   pointer-events: none;
   z-index: 3;
   transition: opacity 0.3s;
@@ -183,7 +183,7 @@ a:hover { color: var(--text); }
   margin-bottom: 1px;
   height: 84px;
   overflow: hidden;
-  opacity: 0.4;
+  opacity: 0.75;
   flex-shrink: 0;
 }
 .project.active {
@@ -300,6 +300,37 @@ a:hover { color: var(--text); }
   border-radius: 2px;
   padding: 2px 7px;
 }
+
+/* ── LIST SCROLLBAR ── */
+.list-scrollbar {
+  position: absolute;
+  right: 0;
+  top: 10px;
+  bottom: 10px;
+  width: 10px;
+  cursor: pointer;
+  z-index: 4;
+}
+.list-scrollbar::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 0; bottom: 0;
+  width: 3px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 2px;
+}
+.list-scrollbar-thumb {
+  position: absolute;
+  right: 0;
+  width: 3px;
+  background: var(--dim);
+  border-radius: 2px;
+  transition: top 0.18s ease-out, height 0.18s ease-out;
+  cursor: grab;
+}
+.list-scrollbar-thumb:active { cursor: grabbing; }
+.list-scrollbar.dragging .list-scrollbar-thumb { transition: none; }
 
 /* ── SCROLL HINT ── */
 .scroll-hint {

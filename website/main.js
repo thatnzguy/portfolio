@@ -41,8 +41,10 @@ const currentIdx = { prof: 0, pers: 0 };
 let selectTimer = null;
 
 // ── ELEMENTS ──
-const listArea   = document.getElementById('listArea');
-const scrollHint = document.getElementById('scrollHint');
+const listArea        = document.getElementById('listArea');
+const scrollHint      = document.getElementById('scrollHint');
+const listScrollbar   = document.getElementById('listScrollbar');
+const listScrollThumb = document.getElementById('listScrollbarThumb');
 
 function getList(tab)     { return document.getElementById('list-' + tab); }
 function getProjects(tab) { return Array.from(getList(tab).querySelectorAll('.project')); }
@@ -61,12 +63,24 @@ function getOffset(projects, idx) {
   return offset - (areaH / 2) + (ACTIVE_H / 2);
 }
 
+function updateScrollbar(tab, idx) {
+  const total = getProjects(tab).length;
+  if (total <= 1) { listScrollbar.style.opacity = '0'; return; }
+  listScrollbar.style.opacity = '1';
+  const trackH = listArea.getBoundingClientRect().height - 20; // account for top/bottom offset
+  const thumbH = Math.max(24, trackH / total);
+  const thumbTop = idx * (trackH - thumbH) / (total - 1);
+  listScrollThumb.style.height = thumbH + 'px';
+  listScrollThumb.style.top    = thumbTop + 'px';
+}
+
 function applySelect(tab, idx) {
   const projects = getProjects(tab);
   projects.forEach((p, i) => p.classList.toggle('active', i === idx));
   listArea.classList.toggle('at-top',    idx === 0);
   listArea.classList.toggle('at-bottom', idx === projects.length - 1);
   if (idx !== 0) scrollHint.classList.add('hidden');
+  updateScrollbar(tab, idx);
 }
 
 function activate(tab, idx) {
@@ -146,6 +160,34 @@ window.addEventListener('touchend', e => {
   if (Math.abs(dy) > 30) activate(activeTab, currentIdx[activeTab] + (dy > 0 ? 1 : -1));
 }, { passive: true });
 
+// ── SCROLLBAR INTERACTION ──
+function scrollbarClientYToIdx(clientY) {
+  const rect  = listScrollbar.getBoundingClientRect();
+  const total = getProjects(activeTab).length;
+  const thumbH = Math.max(24, rect.height / total);
+  const ratio = Math.max(0, Math.min(1, (clientY - rect.top - thumbH / 2) / (rect.height - thumbH)));
+  return Math.round(ratio * (total - 1));
+}
+
+listScrollbar.addEventListener('mousedown', e => {
+  e.preventDefault();
+  listScrollbar.classList.add('dragging');
+  const idx = scrollbarClientYToIdx(e.clientY);
+  activate(activeTab, idx);
+
+  function onMove(e) {
+    activate(activeTab, scrollbarClientYToIdx(e.clientY));
+  }
+  function onUp() {
+    listScrollbar.classList.remove('dragging');
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup', onUp);
+  }
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup', onUp);
+});
+
 // ── INIT ──
 applySelect('prof', 0);
 applySelect('pers', 0);
+requestAnimationFrame(() => updateScrollbar(activeTab, currentIdx[activeTab]));
