@@ -1,0 +1,151 @@
+// ── BUILD DOM FROM DATA ──
+function buildProject(p) {
+  const thumbHTML = p.thumb
+    ? `<img src="${p.thumb}" alt="${p.title}">`
+    : `<div class="thumb-placeholder">${p.id.slice(0,2).toUpperCase()}</div>`;
+
+  const linksHTML = p.links.length
+    ? `<div class="details-links">${p.links.map(l => `<a href="${l.url}" target="_blank">${l.label}</a>`).join('')}</div>`
+    : '';
+
+  const tagsHTML = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+
+  return `
+    <div class="project" data-id="${p.id}">
+      <div class="year">${p.year}</div>
+      <div class="thumb">${thumbHTML}</div>
+      <div class="main">
+        <div class="title">${p.title}</div>
+        <div class="meta">${p.meta}</div>
+        <div class="blurb">${p.blurb}</div>
+        <div class="details"><div class="details-inner">
+          <p>${p.involvement}</p>
+          ${linksHTML}
+          <div class="tags">${tagsHTML}</div>
+        </div></div>
+      </div>
+    </div>`;
+}
+
+function buildList(tab, projects) {
+  const el = document.getElementById('list-' + tab);
+  el.innerHTML = projects.map(buildProject).join('');
+}
+
+buildList('prof', PROJECTS.professional);
+buildList('pers', PROJECTS.personal);
+
+// ── STATE ──
+let activeTab = 'prof';
+const currentIdx = { prof: 0, pers: 0 };
+let selectTimer = null;
+
+// ── ELEMENTS ──
+const listArea   = document.getElementById('listArea');
+const scrollHint = document.getElementById('scrollHint');
+
+function getList(tab)     { return document.getElementById('list-' + tab); }
+function getProjects(tab) { return Array.from(getList(tab).querySelectorAll('.project')); }
+
+// ── POSITION ──
+const ROW_H       = 85;  // inactive row height + margin
+const ACTIVE_H    = 217; // active row height + margin
+
+function getOffset(projects, idx) {
+  const areaH = listArea.getBoundingClientRect().height;
+  // Use fixed heights to avoid measuring mid-transition
+  let offset = 0;
+  for (let i = 0; i < idx; i++) {
+    offset += (i === currentIdx[activeTab] ? ACTIVE_H : ROW_H);
+  }
+  return offset - (areaH / 2) + (ACTIVE_H / 2);
+}
+
+function applySelect(tab, idx) {
+  const projects = getProjects(tab);
+  projects.forEach((p, i) => p.classList.toggle('active', i === idx));
+  listArea.classList.toggle('at-top',    idx === 0);
+  listArea.classList.toggle('at-bottom', idx === projects.length - 1);
+  if (idx !== 0) scrollHint.classList.add('hidden');
+}
+
+function activate(tab, idx) {
+  const projects = getProjects(tab);
+  idx = Math.max(0, Math.min(idx, projects.length - 1));
+  if (idx === currentIdx[tab]) return;
+  const prev = currentIdx[tab];
+  currentIdx[tab] = idx;
+
+  projects[prev].classList.remove('active');
+  applySelect(tab, idx);
+  getList(tab).style.transform = `translateY(${-Math.max(0, getOffset(projects, idx))}px)`;
+}
+
+// ── TABS ──
+function switchTab(tab) {
+  if (tab === activeTab) return;
+  activeTab = tab;
+  document.querySelectorAll('.tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.tab === tab)
+  );
+  document.querySelectorAll('.project-list').forEach(l => l.classList.add('hidden'));
+  const list = getList(tab);
+  list.classList.remove('hidden');
+  list.style.transform = 'translateY(0)';
+  scrollHint.classList.remove('hidden');
+  listArea.classList.add('at-top');
+  listArea.classList.remove('at-bottom');
+  applySelect(tab, currentIdx[tab]);
+}
+
+// ── JUMP TO (from highlights) ──
+function jumpTo(tab, id) {
+  switchTab(tab);
+  const projects = getProjects(tab);
+  const idx = projects.findIndex(p => p.dataset.id === id);
+  if (idx < 0) return;
+  currentIdx[tab] = idx;
+  const list = getList(tab);
+  list.style.transition = 'none';
+  list.style.transform = `translateY(${-Math.max(0, getOffset(projects, idx))}px)`;
+  setTimeout(() => { list.style.transition = ''; }, 50);
+  applySelect(tab, idx);
+}
+
+// ── SCROLL ──
+let lastWheel = 0;
+window.addEventListener('wheel', e => {
+  e.preventDefault();
+  const now = Date.now();
+  if (now - lastWheel < 80) return;
+  lastWheel = now;
+  activate(activeTab, currentIdx[activeTab] + (e.deltaY > 0 ? 1 : -1));
+}, { passive: false });
+
+// ── KEYBOARD ──
+window.addEventListener('keydown', e => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); activate(activeTab, currentIdx[activeTab] + 1); }
+  if (e.key === 'ArrowUp'   || e.key === 'ArrowLeft')  { e.preventDefault(); activate(activeTab, currentIdx[activeTab] - 1); }
+});
+
+// ── CLICK ROW ──
+document.querySelectorAll('.project-list').forEach(list => {
+  list.addEventListener('click', e => {
+    const row = e.target.closest('.project');
+    if (!row) return;
+    const projects = getProjects(activeTab);
+    activate(activeTab, projects.indexOf(row));
+  });
+});
+
+// ── TOUCH ──
+let touchStartY = 0;
+window.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+window.addEventListener('touchend', e => {
+  const dy = touchStartY - e.changedTouches[0].clientY;
+  if (Math.abs(dy) > 30) activate(activeTab, currentIdx[activeTab] + (dy > 0 ? 1 : -1));
+}, { passive: true });
+
+// ── INIT ──
+applySelect('prof', 0);
+applySelect('pers', 0);

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joel Schroyen — Game Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Mono&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="page">
+
+  <header class="header">
+    <div class="bio">
+      <div class="bio-name">Joel Schroyen</div>
+      <div class="bio-role">Game Designer</div>
+      <div class="bio-text">15 years designing games and XR experiences through all stages of development — from prototype to shipped product.</div>
+      <div class="bio-links">
+        <a href="https://www.linkedin.com/in/joelschroyen" target="_blank">LinkedIn ↗</a>
+        <a href="mailto:joel@joelschroyen.nz">Contact ↗</a>
+      </div>
+    </div>
+
+  </header>
+
+  <nav class="tabs">
+    <div class="tab active" data-tab="prof" onclick="switchTab('prof')">Professional</div>
+    <div class="tab" data-tab="pers" onclick="switchTab('pers')">Personal</div>
+  </nav>
+
+  <div class="list-area at-top" id="listArea">
+    <div class="project-list" id="list-prof"></div>
+    <div class="project-list hidden" id="list-pers"></div>
+  </div>
+
+  <div class="scroll-hint" id="scrollHint">scroll ↕</div>
+
+</div>
+<script src="projects.js"></script>
+<script src="main.js"></script>
+</body>
+</html>
