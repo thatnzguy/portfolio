@@ -11,7 +11,7 @@ function buildProject(p) {
   const tagsHTML = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
 
   return `
-    <div class="project" data-id="${p.id}">
+    <div class="project${p.highlight ? ' highlight' : ''}" data-id="${p.id}">
       <div class="year">${p.year}</div>
       <div class="thumb">${thumbHTML}</div>
       <div class="main">
@@ -50,17 +50,14 @@ function getList(tab)     { return document.getElementById('list-' + tab); }
 function getProjects(tab) { return Array.from(getList(tab).querySelectorAll('.project')); }
 
 // ── POSITION ──
-const ROW_H       = 85;  // inactive row height + margin
-const ACTIVE_H    = 217; // active row height + margin
-
 function getOffset(projects, idx) {
   const areaH = listArea.getBoundingClientRect().height;
-  // Use fixed heights to avoid measuring mid-transition
   let offset = 0;
   for (let i = 0; i < idx; i++) {
-    offset += (i === currentIdx[activeTab] ? ACTIVE_H : ROW_H);
+    offset += projects[i].getBoundingClientRect().height + 1; // +1 for margin-bottom
   }
-  return offset - (areaH / 2) + (ACTIVE_H / 2);
+  const activeH = projects[idx].getBoundingClientRect().height;
+  return offset - (areaH / 2) + (activeH / 2);
 }
 
 function updateScrollbar(tab, idx) {
