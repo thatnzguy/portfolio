@@ -23,9 +23,11 @@ const PROJECTS = {
       meta: 'Niantic Labs · WebVR · 8th Wall → Meta Quest',
       blurb: 'Browse a globe populated with user-created Gaussian Splat scans.',
       thumb: 'assets/images/scaniverse/hero.webp',
+      youtube: 'yJ-5Qz3nHpM',
       highlight: true,
       involvement: 'Design, prototype, UX, implementation. Team of ~10. Designed the 3D environment and UX — a globe covered in pins that users rotate and zoom. Designed a feed system for surfacing relevant and interesting splats. Helped iterate the overall experience and ship it to the Meta Quest store.',
       links: [
+        { label: 'Trailer ↗', url: 'https://www.youtube.com/watch?v=yJ-5Qz3nHpM' },
         { label: 'Meta Quest ↗', url: 'https://www.meta.com/en-gb/experiences/into-the-scaniverse/8575253579256191/' },
         { label: 'Niantic Labs ↗', url: 'https://nianticlabs.com/news/into-the-scaniverse-native-app-meta-quest?hl=en' },
       ],
@@ -179,7 +181,7 @@ const PROJECTS = {
       highlight: true,
       involvement: 'Designing, prototyping, testing — creating novel 3D mixed-reality interfaces, puzzles, missions, systems and environments. Many gameplay prototypes for a cutting-edge in-development headset, working across Magic Leap and Weta Workshop.',
       links: [
-        { label: 'Trailer ↗', url: 'https://www.youtube.com/watch?v=KHmyQyeYEQY' },
+        { label: 'Trailer ↗', url: 'https://www.youtube.com/watch?v=45ZHNq9_7eY' },
       ],
       tags: ['Magic Leap', 'MR Shooter', 'Weta Workshop', 'Unity', 'Shipped'],
     },

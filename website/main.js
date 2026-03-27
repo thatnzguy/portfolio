@@ -1,5 +1,9 @@
 // ── BUILD DOM FROM DATA ──
 function buildProject(p) {
+  const ytIframe = p.youtube
+    ? `<iframe class="yt-iframe" data-ytid="${p.youtube}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+    : '';
+
   const thumbHTML = p.thumb
     ? `<img src="${p.thumb}" alt="${p.title}">`
     : `<div class="thumb-placeholder">${p.id.slice(0,2).toUpperCase()}</div>`;
@@ -13,7 +17,7 @@ function buildProject(p) {
   return `
     <div class="project${p.highlight ? ' highlight' : ''}" data-id="${p.id}">
       <div class="year">${p.year}</div>
-      <div class="thumb">${thumbHTML}</div>
+      <div class="thumb">${ytIframe}${thumbHTML}</div>
       <div class="main">
         <div class="title">${p.title}</div>
         <div class="meta">${p.meta}</div>
@@ -88,13 +92,32 @@ function activate(tab, idx) {
   currentIdx[tab] = idx;
 
   projects[prev].classList.remove('active');
+  stopVideo(projects[prev]);
+  startVideo(projects[idx]);
   applySelect(tab, idx);
   getList(tab).style.transform = `translateY(${-Math.max(0, getOffset(projects, idx))}px)`;
+}
+
+// ── VIDEO ──
+function startVideo(project) {
+  const iframe = project.querySelector('.yt-iframe');
+  if (!iframe) return;
+  project.classList.add('has-video');
+  project.querySelector('.thumb').classList.add('yt-playing');
+  iframe.src = `https://www.youtube.com/embed/${iframe.dataset.ytid}?autoplay=1&mute=1`;
+}
+function stopVideo(project) {
+  const iframe = project.querySelector('.yt-iframe');
+  if (!iframe) return;
+  project.classList.remove('has-video');
+  project.querySelector('.thumb').classList.remove('yt-playing');
+  iframe.src = '';
 }
 
 // ── TABS ──
 function switchTab(tab) {
   if (tab === activeTab) return;
+  stopVideo(getProjects(activeTab)[currentIdx[activeTab]]);
   activeTab = tab;
   document.querySelectorAll('.tab').forEach(t =>
     t.classList.toggle('active', t.dataset.tab === tab)
