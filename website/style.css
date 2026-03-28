@@ -9,7 +9,7 @@
   --dim:       #50505e;
   --accent:    #d4924a;
   --accent2:   #6a9fbe;
-  --col-width: 880px;
+  --col-width: 1000px;
 
   --font-display: 'Syne', sans-serif;
   --font-mono:    'Space Mono', monospace;
@@ -295,13 +295,11 @@ a:hover { color: var(--text); }
 .thumb.yt-playing .thumb-placeholder { display: none; }
 .thumb.yt-playing .yt-iframe { display: block; width: 100%; height: 100%; }
 
-/* Video playing: left edge aligns with selection box left edge */
+/* Video playing: inherits same layout as other active rows; just fix height for 16:9 */
 .project.active.has-video .thumb.yt-playing {
-  width: 248px;
-  margin-left: -151px; /* thumb at 151px from list-area left; lands exactly at list-area left */
-  height: 100%;
-  align-self: stretch;
+  height: 180px; /* 16:9 at 320px width */
   aspect-ratio: unset;
+  align-self: flex-start;
 }
 .thumb-placeholder {
   font-family: var(--font-display);
