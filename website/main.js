@@ -1,5 +1,27 @@
+// ── SORT ──
+let sortMode = 'rank';
+
+function parseYear(y) {
+  const s = String(y);
+  const range = s.match(/(\d{4})[–\-](\d{2,4})/);
+  if (range) {
+    const end = range[2].length === 4 ? range[2] : range[1].slice(0, 2) + range[2];
+    return parseInt(end);
+  }
+  const m = s.match(/\d{4}/);
+  return m ? parseInt(m[0]) : 0;
+}
+
+function getSorted(arr) {
+  return [...arr].sort((a, b) =>
+    sortMode === 'rank'
+      ? (b.rank ?? 0) - (a.rank ?? 0)
+      : parseYear(b.year) - parseYear(a.year)
+  );
+}
+
 // ── BUILD DOM FROM DATA ──
-function buildProject(p) {
+function buildProject(p, pos) {
   const ytIframe = p.youtube
     ? `<iframe class="yt-iframe" data-ytid="${p.youtube}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
     : '';
@@ -16,7 +38,7 @@ function buildProject(p) {
 
   return `
     <div class="project${p.highlight ? ' highlight' : ''}" data-id="${p.id}">
-      <div class="year">${p.year}</div>
+      <div class="year"><span class="rank-pos">${pos}</span><span class="year-val">${p.year}</span></div>
       <div class="thumb">${ytIframe}${thumbHTML}</div>
       <div class="main">
         <div class="title">${p.title}</div>
@@ -33,11 +55,11 @@ function buildProject(p) {
 
 function buildList(tab, projects) {
   const el = document.getElementById('list-' + tab);
-  el.innerHTML = projects.map(buildProject).join('');
+  el.innerHTML = projects.map((p, i) => buildProject(p, i + 1)).join('');
 }
 
-buildList('prof', PROJECTS.professional);
-buildList('pers', PROJECTS.personal);
+buildList('prof', getSorted(PROJECTS.professional));
+buildList('pers', getSorted(PROJECTS.personal));
 
 // ── STATE ──
 let activeTab = 'prof';
@@ -112,6 +134,26 @@ function stopVideo(project) {
   project.classList.remove('has-video');
   project.querySelector('.thumb').classList.remove('yt-playing');
   iframe.src = '';
+}
+
+// ── SORT TOGGLE ──
+function switchSort(mode) {
+  if (mode === sortMode) return;
+  sortMode = mode;
+  stopVideo(getProjects(activeTab)[currentIdx[activeTab]]);
+  currentIdx.prof = 0;
+  currentIdx.pers = 0;
+  buildList('prof', getSorted(PROJECTS.professional));
+  buildList('pers', getSorted(PROJECTS.personal));
+  document.querySelectorAll('.sort-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.sort === mode)
+  );
+  document.querySelector('.page').classList.toggle('sort-rank', mode === 'rank');
+  document.querySelectorAll('.project-list').forEach(l => l.style.transform = 'translateY(0)');
+  scrollHint.classList.remove('hidden');
+  listArea.classList.add('at-top');
+  listArea.classList.remove('at-bottom');
+  applySelect(activeTab, 0);
 }
 
 // ── TABS ──
@@ -208,6 +250,7 @@ listScrollbar.addEventListener('mousedown', e => {
 });
 
 // ── INIT ──
+document.querySelector('.page').classList.add('sort-rank');
 applySelect('prof', 0);
 applySelect('pers', 0);
 requestAnimationFrame(() => updateScrollbar(activeTab, currentIdx[activeTab]));

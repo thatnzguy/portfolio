@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=Space+Mono&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css?v=21">
+  <link rel="stylesheet" href="style.css?v=25">
 </head>
 <body>
 <div class="page">
@@ -34,6 +34,12 @@
     <div class="tab active" data-tab="prof" onclick="switchTab('prof')">Professional</div>
     <div class="tab" data-tab="pers" onclick="switchTab('pers')">Personal</div>
   </nav>
+  <div class="sort-bar">
+    <span class="sort-label">Sort:</span>
+    <span class="sort-btn active" data-sort="rank" onclick="switchSort('rank')">Rank</span>
+    <span class="sort-sep">/</span>
+    <span class="sort-btn" data-sort="date" onclick="switchSort('date')">Date</span>
+  </div>
 
   <div class="list-area at-top" id="listArea">
     <div class="project-list" id="list-prof"></div>
@@ -44,7 +50,7 @@
   <div class="scroll-hint" id="scrollHint">scroll ↕</div>
 
 </div>
-<script src="projects.js?v=21"></script>
-<script src="main.js?v=21"></script>
+<script src="projects.js?v=25"></script>
+<script src="main.js?v=25"></script>
 </body>
 </html>

@@ -162,6 +162,39 @@ a:hover { color: var(--text); }
 .tab:hover { color: var(--muted); }
 .tab.active { color: var(--text); border-bottom-color: var(--accent); }
 
+/* ── SORT BAR ── */
+.sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 0 6px;
+  flex-shrink: 0;
+}
+.sort-btn {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+  cursor: pointer;
+  transition: color 0.15s;
+  user-select: none;
+}
+.sort-btn:hover { color: var(--muted); }
+.sort-btn.active { color: var(--accent); }
+.sort-sep {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--dim);
+}
+.sort-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--dim);
+}
+
 /* ── LIST AREA ── */
 .list-area {
   flex: 1;
@@ -285,6 +318,11 @@ a:hover { color: var(--text); }
 .project.active .thumb img { height: auto; }
 .project.active .year { opacity: 0; } /* covered by expanded thumb */
 .project.active .thumb-placeholder { font-size: 72px; }
+
+/* year / rank position */
+.rank-pos { display: none; }
+.sort-rank .project:not(.active) .rank-pos { display: block; }
+.sort-rank .project:not(.active) .year-val { display: none; }
 
 /* year */
 .project .year {
