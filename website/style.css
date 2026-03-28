@@ -250,7 +250,7 @@ a:hover { color: var(--text); }
   overflow: visible;
   opacity: 1;
   margin: 0 -20px 0 -202px;
-  padding: 40px 50px 40px 211px;
+  padding: 20px 20px 20px 211px;
 }
 
 /* ── HIGHLIGHT TREATMENT ── */
@@ -270,7 +270,7 @@ a:hover { color: var(--text); }
   background: rgba(212, 146, 74, 0.07);
   border: 1px solid rgba(212, 146, 74, 0.55);
   margin: 0 -20px 0 -202px;
-  padding: 40px 50px 40px 211px;
+  padding: 20px 20px 20px 211px;
 }
 .project.highlight.active .title {
   color: var(--accent);
