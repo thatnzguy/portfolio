@@ -125,14 +125,17 @@ function startVideo(project) {
   const iframe = project.querySelector('.yt-iframe');
   if (!iframe) return;
   project.classList.add('has-video');
-  project.querySelector('.thumb').classList.add('yt-playing');
+  const thumb = project.querySelector('.thumb');
+  thumb.classList.add('yt-playing');
   iframe.src = `https://www.youtube.com/embed/${iframe.dataset.ytid}?autoplay=1&mute=1`;
+  setTimeout(() => thumb.classList.add('yt-fading'), 400);
 }
 function stopVideo(project) {
   const iframe = project.querySelector('.yt-iframe');
   if (!iframe) return;
   project.classList.remove('has-video');
-  project.querySelector('.thumb').classList.remove('yt-playing');
+  const thumb = project.querySelector('.thumb');
+  thumb.classList.remove('yt-playing', 'yt-fading');
   iframe.src = '';
 }
 

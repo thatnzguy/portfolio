@@ -291,9 +291,28 @@ a:hover { color: var(--text); }
 }
 .project .thumb img { width: 100%; height: 100%; object-fit: cover; }
 .yt-iframe { display: none; border: 0; }
-.thumb.yt-playing img,
-.thumb.yt-playing .thumb-placeholder { display: none; }
-.thumb.yt-playing .yt-iframe { display: block; width: 100%; height: 100%; }
+
+/* Stack thumbnail and iframe for cross-fade */
+.thumb.yt-playing > * {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+.thumb.yt-playing img { object-fit: cover; z-index: 2; transition: opacity 0.5s; }
+.thumb.yt-playing .thumb-placeholder {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.5s;
+}
+.thumb.yt-playing .yt-iframe { display: block; z-index: 1; opacity: 0; transition: opacity 0.5s; }
+
+/* Trigger the cross-fade */
+.thumb.yt-fading img,
+.thumb.yt-fading .thumb-placeholder { opacity: 0; }
+.thumb.yt-fading .yt-iframe { opacity: 1; }
 
 /* Video playing: inherits same layout as other active rows; just fix height for 16:9 */
 .project.active.has-video .thumb.yt-playing {
