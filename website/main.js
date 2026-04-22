@@ -45,6 +45,7 @@ function buildProject(p, pos) {
       <div class="thumb">${ytIframe}${thumbHTML}</div>
       <div class="main">
         <div class="title">${p.title}</div>
+        <div class="year-active">${p.year}</div>
         <div class="meta">${p.meta}</div>
         <div class="blurb">${p.blurb}</div>
         <div class="details"><div class="details-inner">

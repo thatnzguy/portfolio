@@ -361,6 +361,16 @@ a:hover { color: var(--text); }
 }
 .project.active .year { color: var(--muted); }
 
+.year-active { display: none; }
+.project.active .year-active {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--dim);
+  letter-spacing: 0.08em;
+  margin-bottom: 3px;
+}
+
 /* main content */
 .project .main { overflow: hidden; min-width: 0; }
 
