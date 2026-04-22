@@ -392,6 +392,13 @@ a:hover { color: var(--text); }
 .project.active .meta { color: var(--accent2); white-space: normal; }
 
 .project .blurb { display: none; }
+.project.active .blurb {
+  display: block;
+  font-size: 14px;
+  color: var(--muted);
+  margin: 5px 0 9px;
+  line-height: 1.6;
+}
 
 /* ── DETAILS ── */
 .details { display: none; }
