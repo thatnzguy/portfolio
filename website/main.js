@@ -23,7 +23,7 @@ function getSorted(arr) {
 // ── BUILD DOM FROM DATA ──
 function buildProject(p, pos) {
   const ytIframe = p.youtube
-    ? `<iframe class="yt-iframe" data-ytid="${p.youtube}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+    ? `<iframe class="yt-iframe" data-ytid="${p.youtube}" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe><div class="yt-cover"></div>`
     : '';
 
   const thumbHTML = p.thumb
@@ -126,16 +126,25 @@ function startVideo(project) {
   if (!iframe) return;
   project.classList.add('has-video');
   const thumb = project.querySelector('.thumb');
+  const cover = project.querySelector('.yt-cover');
   thumb.classList.add('yt-playing');
-  iframe.src = `https://www.youtube.com/embed/${iframe.dataset.ytid}?autoplay=1&mute=1`;
-  setTimeout(() => thumb.classList.add('yt-fading'), 400);
+  if (cover) cover.classList.add('active');
+  iframe.src = `https://www.youtube.com/embed/${iframe.dataset.ytid}?autoplay=1&mute=1&controls=1`;
+  project._fadeTimer = setTimeout(() => {
+    thumb.classList.add('yt-fading');
+    project._coverTimer = setTimeout(() => { if (cover) cover.classList.remove('active'); }, 500);
+  }, 800);
 }
 function stopVideo(project) {
   const iframe = project.querySelector('.yt-iframe');
   if (!iframe) return;
+  clearTimeout(project._fadeTimer);
+  clearTimeout(project._coverTimer);
   project.classList.remove('has-video');
   const thumb = project.querySelector('.thumb');
+  const cover = project.querySelector('.yt-cover');
   thumb.classList.remove('yt-playing', 'yt-fading');
+  if (cover) cover.classList.remove('active');
   iframe.src = '';
 }
 
@@ -179,6 +188,7 @@ function switchTab(tab) {
 
 // ── JUMP TO (from highlights) ──
 function jumpTo(tab, id) {
+  stopVideo(getProjects(activeTab)[currentIdx[activeTab]]);
   switchTab(tab);
   const projects = getProjects(tab);
   const idx = projects.findIndex(p => p.dataset.id === id);
@@ -188,6 +198,7 @@ function jumpTo(tab, id) {
   list.style.transition = 'none';
   list.style.transform = `translateY(${-Math.max(0, getOffset(projects, idx))}px)`;
   setTimeout(() => { list.style.transition = ''; }, 50);
+  startVideo(projects[idx]);
   applySelect(tab, idx);
 }
 

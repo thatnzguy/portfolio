@@ -251,6 +251,7 @@ a:hover { color: var(--text); }
   opacity: 1;
   margin: 0 -20px 0 -162px;
   padding: 20px 20px 20px 171px;
+  cursor: default;
 }
 
 /* ── HIGHLIGHT TREATMENT ── */
@@ -311,8 +312,12 @@ a:hover { color: var(--text); }
 
 /* Trigger the cross-fade */
 .thumb.yt-fading img,
-.thumb.yt-fading .thumb-placeholder { opacity: 0; }
+.thumb.yt-fading .thumb-placeholder { opacity: 0; pointer-events: none; }
 .thumb.yt-fading .yt-iframe { opacity: 1; }
+
+/* Cover blocks hover-triggered controls until thumbnail finishes fading */
+.yt-cover { display: none; position: absolute; inset: 0; z-index: 10; }
+.yt-cover.active { display: block; }
 
 /* Video playing: inherits same layout as other active rows; just fix height for 16:9 */
 .project.active.has-video .thumb.yt-playing {
