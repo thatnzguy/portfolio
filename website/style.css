@@ -339,7 +339,7 @@ a:hover { color: var(--text); }
   position: relative;
   z-index: 1;
 }
-.project.active .thumb img { height: auto; }
+.project.active .thumb:not(.yt-playing) img { height: auto; }
 .project.active .year { opacity: 0; } /* covered by expanded thumb */
 .project.active .thumb-placeholder { font-size: 72px; }
 
@@ -431,6 +431,21 @@ a:hover { color: var(--text); }
   border-radius: 2px;
   padding: 2px 7px;
 }
+
+/* ── VIDEO CAPTION ── */
+.video-caption {
+  display: none;
+  grid-column: 2;
+  margin-left: -223px;
+  width: 320px;
+  padding-top: 5px;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.4;
+}
+.project.active .video-caption { display: block; }
 
 /* ── LIST SCROLLBAR ── */
 .list-scrollbar {

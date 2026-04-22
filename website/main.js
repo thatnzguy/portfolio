@@ -35,6 +35,9 @@ function buildProject(p, pos) {
     : '';
 
   const tagsHTML = p.tags.map(t => `<span class="tag">${t}</span>`).join('');
+  const videoCaptionHTML = (p.youtube && p.videoCaption)
+    ? `<div class="video-caption">${p.videoCaption}</div>`
+    : '';
 
   return `
     <div class="project${p.highlight ? ' highlight' : ''}" data-id="${p.id}">
@@ -50,6 +53,7 @@ function buildProject(p, pos) {
           <div class="tags">${tagsHTML}</div>
         </div></div>
       </div>
+      ${videoCaptionHTML}
     </div>`;
 }
 
