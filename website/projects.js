@@ -181,7 +181,7 @@ const PROJECTS = {
     },
     {
       id: 'invaders',
-      year: '2015–19',
+      year: '2015–2019',
       title: "Dr Grordbort's Invaders",
       meta: 'Magic Leap / Weta Workshop · Magic Leap One · Unity',
       blurb: 'Large budget Mixed Reality shooter — robots climb out of your walls.',
@@ -196,7 +196,7 @@ const PROJECTS = {
     },
     {
       id: 'poe',
-      year: '2011–15',
+      year: '2011–2015',
       title: 'Path of Exile',
       meta: 'Grinding Gear Games · PC · In-house engine',
       blurb: 'Diablo-inspired online Action RPG. PC Game of the Year 2013.',
