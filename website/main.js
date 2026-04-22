@@ -42,7 +42,10 @@ function buildProject(p, pos) {
   return `
     <div class="project${p.highlight ? ' highlight' : ''}" data-id="${p.id}">
       <div class="year"><span class="rank-pos">${pos}</span><span class="year-val">${p.year}</span></div>
-      <div class="thumb">${ytIframe}${thumbHTML}</div>
+      <div class="thumb-col">
+        <div class="thumb">${ytIframe}${thumbHTML}</div>
+        ${videoCaptionHTML}
+      </div>
       <div class="main">
         <div class="title">${p.title}</div>
         <div class="meta"><span class="year-active">${p.year} · </span>${p.meta}</div>
@@ -53,7 +56,6 @@ function buildProject(p, pos) {
           <div class="tags">${tagsHTML}</div>
         </div></div>
       </div>
-      ${videoCaptionHTML}
     </div>`;
 }
 

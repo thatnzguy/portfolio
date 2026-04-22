@@ -323,7 +323,6 @@ a:hover { color: var(--text); }
 .project.active.has-video .thumb.yt-playing {
   height: 180px; /* 16:9 at 320px width */
   aspect-ratio: unset;
-  align-self: flex-start;
 }
 .thumb-placeholder {
   font-family: var(--font-display);
@@ -331,13 +330,18 @@ a:hover { color: var(--text); }
   font-weight: 700;
   color: var(--dim);
 }
-.project.active .thumb {
+.project.active .thumb-col {
   width: 320px;
-  height: auto;
-  border-radius: 6px;
   margin-left: -223px; /* grow leftward — keeps title at same x as collapsed rows */
   position: relative;
   z-index: 1;
+  align-self: center;
+}
+.project.active .thumb {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  position: relative;
 }
 .project.active .thumb:not(.yt-playing) img { height: auto; }
 .project.active .year { opacity: 0; } /* covered by expanded thumb */
@@ -445,9 +449,6 @@ a:hover { color: var(--text); }
 /* ── VIDEO CAPTION ── */
 .video-caption {
   display: none;
-  grid-column: 2;
-  margin-left: -223px;
-  width: 320px;
   padding-top: 5px;
   font-size: 12px;
   font-style: italic;
@@ -517,5 +518,6 @@ a:hover { color: var(--text); }
   .bio { flex-direction: column; align-items: flex-start; gap: 14px; }
   .highlights-cards { flex-direction: column; }
   .project .thumb { width: 66px; height: 48px; }
-  .project.active .thumb { width: 120px; height: 120px; }
+  .project.active .thumb-col { width: 120px; margin-left: 0; }
+  .project.active .thumb { width: 100%; height: auto; }
 }

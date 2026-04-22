@@ -112,7 +112,7 @@ const PROJECTS = {
       title: 'Destination Mars',
       meta: 'NZXR · Tablet · Unreal',
       blurb: 'Theatre experience — ~30–50 participants interact via tablet alongside live actors.',
-      thumb: 'assets/images/destmars/thumb.jpg',
+      thumb: 'assets/images/destmars/Standing.png',
       youtube: 'v_Ou1selGjc',
       videoCaption: 'Trailer with interviews and snippets of the show',
       highlight: true,
