@@ -258,9 +258,8 @@ window.addEventListener('touchend', e => {
 }, { passive: true });
 
 // ── MOBILE SCROLL HIGHLIGHT ──
-let mobileScrollLock = false;
 window.addEventListener('scroll', () => {
-  if (!isMobile() || mobileScrollLock) return;
+  if (!isMobile()) return;
   const viewCenter = window.scrollY + window.innerHeight / 2;
   const projects = getProjects(activeTab);
   let closest = currentIdx[activeTab], minDist = Infinity;
@@ -270,11 +269,7 @@ window.addEventListener('scroll', () => {
     const dist = Math.abs(viewCenter - pCenter);
     if (dist < minDist) { minDist = dist; closest = i; }
   });
-  if (closest !== currentIdx[activeTab]) {
-    mobileScrollLock = true;
-    activate(activeTab, closest, true);
-    setTimeout(() => { mobileScrollLock = false; }, 400);
-  }
+  activate(activeTab, closest, true);
 }, { passive: true });
 
 // ── SCROLLBAR INTERACTION ──
