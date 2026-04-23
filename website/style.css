@@ -515,8 +515,14 @@ a:hover { color: var(--text); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 600px) {
-  /* Page */
-  .page { padding: 0 14px; }
+  /* Native page scroll — undo the fixed-viewport approach */
+  html, body { overflow: auto; height: auto; }
+  .page { height: auto; padding: 0 14px; }
+  .list-area { clip-path: none; flex: none; overflow: visible; margin: 0 -14px; }
+  .list-area::before, .list-area::after { display: none; }
+  .project-list { position: static; padding: 0 14px; }
+  .list-scrollbar { display: none; }
+  .scroll-hint { display: none; }
 
   /* Header */
   .header { padding: 18px 0 14px; gap: 16px; }
@@ -527,11 +533,6 @@ a:hover { color: var(--text); }
 
   /* Tabs */
   .tab { padding: 9px 16px; font-size: 13px; }
-
-  /* List area — compensate for tighter page padding */
-  .list-area { margin: 0 -14px; }
-  .list-area::before, .list-area::after { height: 50px; }
-  .project-list { padding: 0 14px; }
 
   /* Compact inactive rows */
   .project {
@@ -585,7 +586,4 @@ a:hover { color: var(--text); }
   /* Title sizes */
   .project.active .title { font-size: 20px; }
   .project.highlight.active .title { font-size: 22px; letter-spacing: 0; }
-
-  /* Hide scrollbar — touch swipe is used instead */
-  .list-scrollbar { display: none; }
 }

@@ -72,6 +72,8 @@ let activeTab = 'prof';
 const currentIdx = { prof: 0, pers: 0 };
 let selectTimer = null;
 
+function isMobile() { return window.matchMedia('(max-width: 600px)').matches; }
+
 // ── ELEMENTS ──
 const listArea        = document.getElementById('listArea');
 const scrollHint      = document.getElementById('scrollHint');
@@ -123,7 +125,11 @@ function activate(tab, idx) {
   stopVideo(projects[prev]);
   startVideo(projects[idx]);
   applySelect(tab, idx);
-  getList(tab).style.transform = `translateY(${-Math.max(0, getOffset(projects, idx))}px)`;
+  if (isMobile()) {
+    projects[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } else {
+    getList(tab).style.transform = `translateY(${-Math.max(0, getOffset(projects, idx))}px)`;
+  }
 }
 
 // ── VIDEO ──
@@ -167,8 +173,10 @@ function switchSort(mode) {
     b.classList.toggle('active', b.dataset.sort === mode)
   );
   document.querySelector('.page').classList.toggle('sort-rank', mode === 'rank');
-  document.querySelectorAll('.project-list').forEach(l => l.style.transform = 'translateY(0)');
-  scrollHint.classList.remove('hidden');
+  if (!isMobile()) {
+    document.querySelectorAll('.project-list').forEach(l => l.style.transform = 'translateY(0)');
+    scrollHint.classList.remove('hidden');
+  }
   listArea.classList.add('at-top');
   listArea.classList.remove('at-bottom');
   applySelect(activeTab, 0);
@@ -185,8 +193,10 @@ function switchTab(tab) {
   document.querySelectorAll('.project-list').forEach(l => l.classList.add('hidden'));
   const list = getList(tab);
   list.classList.remove('hidden');
-  list.style.transform = 'translateY(0)';
-  scrollHint.classList.remove('hidden');
+  if (!isMobile()) {
+    list.style.transform = 'translateY(0)';
+    scrollHint.classList.remove('hidden');
+  }
   listArea.classList.add('at-top');
   listArea.classList.remove('at-bottom');
   applySelect(tab, currentIdx[tab]);
@@ -200,10 +210,14 @@ function jumpTo(tab, id) {
   const idx = projects.findIndex(p => p.dataset.id === id);
   if (idx < 0) return;
   currentIdx[tab] = idx;
-  const list = getList(tab);
-  list.style.transition = 'none';
-  list.style.transform = `translateY(${-Math.max(0, getOffset(projects, idx))}px)`;
-  setTimeout(() => { list.style.transition = ''; }, 50);
+  if (isMobile()) {
+    projects[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  } else {
+    const list = getList(tab);
+    list.style.transition = 'none';
+    list.style.transform = `translateY(${-Math.max(0, getOffset(projects, idx))}px)`;
+    setTimeout(() => { list.style.transition = ''; }, 50);
+  }
   startVideo(projects[idx]);
   applySelect(tab, idx);
 }
@@ -237,8 +251,8 @@ document.querySelectorAll('.project-list').forEach(list => {
 // ── TOUCH ──
 let touchStartY = 0;
 window.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
-window.addEventListener('touchmove', e => { e.preventDefault(); }, { passive: false });
 window.addEventListener('touchend', e => {
+  if (isMobile()) return;
   const dy = touchStartY - e.changedTouches[0].clientY;
   if (Math.abs(dy) > 30) activate(activeTab, currentIdx[activeTab] + (dy > 0 ? 1 : -1));
 }, { passive: true });
