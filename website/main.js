@@ -237,6 +237,7 @@ document.querySelectorAll('.project-list').forEach(list => {
 // ── TOUCH ──
 let touchStartY = 0;
 window.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+window.addEventListener('touchmove', e => { e.preventDefault(); }, { passive: false });
 window.addEventListener('touchend', e => {
   const dy = touchStartY - e.changedTouches[0].clientY;
   if (Math.abs(dy) > 30) activate(activeTab, currentIdx[activeTab] + (dy > 0 ? 1 : -1));

@@ -25,7 +25,7 @@ html, body {
   font-family: var(--font-body);
   font-size: 20px;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 a { color: var(--accent2); text-decoration: none; }
 a:hover { color: var(--text); }
