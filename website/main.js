@@ -114,7 +114,7 @@ function applySelect(tab, idx) {
   updateScrollbar(tab, idx);
 }
 
-function activate(tab, idx) {
+function activate(tab, idx, skipScroll = false) {
   const projects = getProjects(tab);
   idx = Math.max(0, Math.min(idx, projects.length - 1));
   if (idx === currentIdx[tab]) return;
@@ -126,7 +126,7 @@ function activate(tab, idx) {
   startVideo(projects[idx]);
   applySelect(tab, idx);
   if (isMobile()) {
-    projects[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    if (!skipScroll) projects[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   } else {
     getList(tab).style.transform = `translateY(${-Math.max(0, getOffset(projects, idx))}px)`;
   }
@@ -255,6 +255,26 @@ window.addEventListener('touchend', e => {
   if (isMobile()) return;
   const dy = touchStartY - e.changedTouches[0].clientY;
   if (Math.abs(dy) > 30) activate(activeTab, currentIdx[activeTab] + (dy > 0 ? 1 : -1));
+}, { passive: true });
+
+// ── MOBILE SCROLL HIGHLIGHT ──
+let mobileScrollLock = false;
+window.addEventListener('scroll', () => {
+  if (!isMobile() || mobileScrollLock) return;
+  const viewCenter = window.scrollY + window.innerHeight / 2;
+  const projects = getProjects(activeTab);
+  let closest = currentIdx[activeTab], minDist = Infinity;
+  projects.forEach((p, i) => {
+    const rect = p.getBoundingClientRect();
+    const pCenter = window.scrollY + rect.top + rect.height / 2;
+    const dist = Math.abs(viewCenter - pCenter);
+    if (dist < minDist) { minDist = dist; closest = i; }
+  });
+  if (closest !== currentIdx[activeTab]) {
+    mobileScrollLock = true;
+    activate(activeTab, closest, true);
+    setTimeout(() => { mobileScrollLock = false; }, 400);
+  }
 }, { passive: true });
 
 // ── SCROLLBAR INTERACTION ──
