@@ -515,9 +515,77 @@ a:hover { color: var(--text); }
 
 /* ── RESPONSIVE ── */
 @media (max-width: 600px) {
-  .bio { flex-direction: column; align-items: flex-start; gap: 14px; }
-  .highlights-cards { flex-direction: column; }
-  .project .thumb { width: 66px; height: 48px; }
-  .project.active .thumb-col { width: 120px; margin-left: 0; }
-  .project.active .thumb { width: 100%; height: auto; }
+  /* Page */
+  .page { padding: 0 14px; }
+
+  /* Header */
+  .header { padding: 18px 0 14px; gap: 16px; }
+  .bio { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .bio-name { font-size: 22px; }
+  .bio-text { font-size: 13px; }
+  .bio-links { flex-direction: row; gap: 14px; }
+
+  /* Tabs */
+  .tab { padding: 9px 16px; font-size: 13px; }
+
+  /* List area — compensate for tighter page padding */
+  .list-area { margin: 0 -14px; }
+  .list-area::before, .list-area::after { height: 50px; }
+  .project-list { padding: 0 14px; }
+
+  /* Compact inactive rows */
+  .project {
+    grid-template-columns: 40px 68px 1fr;
+    column-gap: 10px;
+    height: 68px;
+    padding: 8px 6px;
+  }
+  .project .thumb { width: 68px; height: 43px; }
+  .project .year { width: 40px; font-size: 11px; }
+  .project .title { font-size: 17px; }
+  .project .meta { font-size: 11px; }
+
+  /* Highlight rows — remove desktop bleed */
+  .project.highlight { height: 78px; margin: 0; padding: 8px 6px; }
+
+  /* Active project — stack thumb above content, no bleed tricks */
+  .project.active,
+  .project.highlight.active {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 -14px;
+    padding: 14px;
+    height: auto;
+  }
+
+  /* Year is shown inline in the meta line; hide the column */
+  .project.active .year { display: none; }
+
+  /* Full-width thumb */
+  .project.active .thumb-col {
+    width: 100%;
+    margin-left: 0;
+    align-self: unset;
+  }
+  .project.active .thumb {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    position: relative;
+  }
+  .project.active .thumb:not(.yt-playing) img { height: auto; }
+  /* Video: use aspect-ratio instead of fixed px height */
+  .project.active.has-video .thumb.yt-playing {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+  .project.active .thumb-placeholder { font-size: 48px; height: 140px; }
+
+  /* Title sizes */
+  .project.active .title { font-size: 20px; }
+  .project.highlight.active .title { font-size: 22px; letter-spacing: 0; }
+
+  /* Hide scrollbar — touch swipe is used instead */
+  .list-scrollbar { display: none; }
 }
